@@ -1,0 +1,87 @@
+
+
+syntax = "proto3";
+ 
+option go_package = "uc/pb";
+
+
+import "google/protobuf/timestamp.proto";
+
+
+service   UCService{
+
+    rpc Login(RequestLogin) returns  (ResponseLogin);
+    rpc Permission (RequestEmpty) returns (ResponsePermission);
+    rpc GetUser (RequestEmpty) returns (ResponseUser);
+    rpc GetAllUser (RequestEmpty) returns (stream ResponseAllUser);
+    rpc LogOut  (RequestEmpty) returns ( ResponseLogOut);
+    rpc InsertUser  (RequestInsert) returns ( ResponseInsert);
+   }
+
+   
+enum StatusMessage {
+    ALLOW = 0;
+    DENY = 1;
+    UNAUTHORIZED = 2;
+    SUCCESS =3 ;
+    FAILED = 4; 
+}
+  enum StatusCode {
+    Status200 = 0;
+    Status400 = 1;
+    Status401 = 2;
+  }
+  message Status{
+    StatusCode StatusCode =1 ;
+    StatusMessage StatusMessage=2;
+  }
+
+  message User{
+      int32  userID=1;  
+	    string userFname =2;    
+	    string userLname=3;    
+	    string userMobile=4;    
+	    string userAddress=5;    
+	    string userCodeMeli=6;     
+      google.protobuf.Timestamp userDateTime=7; 
+	    bool   userIsActive=8;     
+  }
+
+ message RequestEmpty{}
+
+ message RequestInsert{
+  User User=1;
+}
+message ResponseInsert{
+  Status Status =1;
+}
+
+
+ message RequestLogin{
+    string Mobile=1;
+ }
+
+ message ResponseLogin{
+   string Token = 1;
+   Status Status =2;
+ }
+
+ message ResponsePermission{
+    Status Status =1;
+ }
+
+message ResponseUser{
+    User User=1;
+    Status Status =2;
+}
+
+message ResponseAllUser{
+  User   User=1;
+  Status Status =2;
+}
+
+message ResponseLogOut{
+  Status Status =1;
+}
+
+ 
